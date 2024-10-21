@@ -1,3 +1,4 @@
+import { Department } from 'src/departments/entities/department.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -15,7 +16,7 @@ export class Item {
   @ManyToOne(() => User, (user) => user.items, { nullable: false })
   user: User;
 
-  @ManyToOne(() => Department, (department) => department.items, {
+  @ManyToOne(() => Department, (department) => department.item, {
     nullable: false,
   })
   department: Department;

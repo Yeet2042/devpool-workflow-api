@@ -1,3 +1,4 @@
+import { Department } from 'src/departments/entities/department.entity';
 import { Item } from 'src/items/entities/item.entity';
 import {
   Column,
@@ -18,7 +19,7 @@ export class User {
   @PrimaryGeneratedColumn()
   user_id: number;
 
-  @ManyToOne(() => Department, (department) => department.users, {
+  @ManyToOne(() => Department, (department) => department.user, {
     nullable: false,
   })
   department: Department;
