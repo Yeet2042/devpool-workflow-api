@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DbModule } from './db/db.module';
 import { ItemsModule } from './items/items.module';
 import { UsersModule } from './users/users.module';
+import { DepartmentsModule } from './departments/departments.module';
 import dbConfig from './db/db.config';
 
 @Module({
@@ -13,6 +14,7 @@ import dbConfig from './db/db.config';
     DbModule,
     ItemsModule,
     UsersModule,
+    DepartmentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
