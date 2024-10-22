@@ -37,7 +37,7 @@ describe('ItemsService', () => {
     expect(items).toEqual('This action returns all items');
   });
 
-  it('should find user by id', async () => {
+  it('should find item by id', async () => {
     const item = {
       item_id: 1,
       user_id: 1,
