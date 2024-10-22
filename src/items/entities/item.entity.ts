@@ -31,8 +31,7 @@ export class Item {
   quantity: number;
 
   @Column({
-    type: 'enum',
-    enum: StatusEnum,
+    nullable: false,
     default: StatusEnum.PENDING,
   })
   status: StatusEnum;
