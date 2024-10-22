@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-enum Role {
+export enum Role {
   REQUESTER = 'REQUESTER',
   APPROVER = 'APPROVER',
   ADMIN = 'ADMIN',

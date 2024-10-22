@@ -1,26 +1,66 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { DepartmentsService } from 'src/departments/departments.service';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User) private usersRepo: Repository<User>,
+    private departmentsService: DepartmentsService,
+  ) {}
+
+  async create(createUserDto: CreateUserDto) {
+    const salt = await bcrypt.genSalt();
+    const hashPass = await bcrypt.hash(createUserDto.password, salt);
+
+    const departmentId = await this.departmentsService.findByName(
+      createUserDto.department.name,
+    );
+
+    const userWithHashPass = {
+      ...createUserDto,
+      password: hashPass,
+      department: { department_id: departmentId.department_id },
+    };
+
+    const createdUser = await this.usersRepo.save(userWithHashPass);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPass } = createdUser;
+
+    return userWithoutPass;
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.usersRepo.find({ relations: ['department'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.usersRepo.findOne({
+      where: { user_id: id },
+      relations: ['department'],
+    });
+    if (!user) throw new NotFoundException('User not found');
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.usersRepo.findOne({ where: { user_id: id } });
+    if (!user) throw new NotFoundException('User not found');
+    return this.usersRepo.save({
+      user_id: id,
+      ...updateUserDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.usersRepo.findOne({ where: { user_id: id } });
+    if (!user) throw new NotFoundException('User not found');
+    return this.usersRepo.remove(user);
   }
 }

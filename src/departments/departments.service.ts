@@ -24,6 +24,10 @@ export class DepartmentsService {
     return this.departmentRepo.findOne({ where: { department_id: id } });
   }
 
+  async findByName(name: string): Promise<Department | null> {
+    return this.departmentRepo.findOne({ where: { name: name } });
+  }
+
   update(id: number, updateDepartmentDto: UpdateDepartmentDto) {
     return this.departmentRepo.save({
       department_id: id,
