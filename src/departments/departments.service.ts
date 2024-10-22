@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,7 +16,11 @@ export class DepartmentsService {
     private departmentRepo: Repository<Department>,
   ) {}
 
-  create(createDepartmentDto: CreateDepartmentDto) {
+  async create(createDepartmentDto: CreateDepartmentDto) {
+    const department = await this.findByName(createDepartmentDto.name);
+    if (department) {
+      throw new ConflictException('Department already exists');
+    }
     return this.departmentRepo.save(createDepartmentDto);
   }
 
@@ -20,15 +28,43 @@ export class DepartmentsService {
     return this.departmentRepo.find();
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
+    const department = await this.departmentRepo.findOne({
+      where: { department_id: id },
+    });
+    if (!department) {
+      throw new NotFoundException('Department not found');
+    }
     return this.departmentRepo.findOne({ where: { department_id: id } });
   }
 
   async findByName(name: string): Promise<Department | null> {
+    const department = await this.departmentRepo.findOne({
+      where: { name },
+    });
+    if (!department) {
+      throw new NotFoundException('Department not found');
+    }
     return this.departmentRepo.findOne({ where: { name: name } });
   }
 
-  update(id: number, updateDepartmentDto: UpdateDepartmentDto) {
+  async update(id: number, updateDepartmentDto: UpdateDepartmentDto) {
+    const department = await this.departmentRepo.findOne({
+      where: { department_id: id },
+    });
+    if (!department) {
+      throw new NotFoundException('Department not found');
+    }
+
+    if (department.name === updateDepartmentDto.name) {
+      return updateDepartmentDto;
+    }
+
+    const conflict = await this.findByName(updateDepartmentDto.name);
+    if (conflict) {
+      throw new ConflictException('This name already exists');
+    }
+
     return this.departmentRepo.save({
       department_id: id,
       ...updateDepartmentDto,
@@ -40,7 +76,7 @@ export class DepartmentsService {
       where: { department_id: id },
     });
     if (!department) {
-      throw new NotFoundException(`Not found: id = ${id}`);
+      throw new NotFoundException('Department not found');
     }
     return this.departmentRepo.delete({ department_id: id });
   }
