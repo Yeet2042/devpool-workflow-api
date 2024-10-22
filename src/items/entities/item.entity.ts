@@ -24,7 +24,7 @@ export class Item {
   @Column({ nullable: false })
   title: string;
 
-  @Column({ nullable: false })
+  @Column('decimal', { precision: 20, scale: 4, nullable: false })
   amount: number;
 
   @Column({ nullable: false })
