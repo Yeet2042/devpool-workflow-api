@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +19,13 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
+    const conflict = await this.usersRepo.findOne({
+      where: { email: createUserDto.email },
+    });
+    if (conflict) {
+      throw new ConflictException('This email already exists');
+    }
+
     const salt = await bcrypt.genSalt();
     const hashPass = await bcrypt.hash(createUserDto.password, salt);
 
@@ -52,6 +63,18 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.usersRepo.findOne({ where: { user_id: id } });
     if (!user) throw new NotFoundException('User not found');
+
+    if (user.email === updateUserDto.email) {
+      return updateUserDto;
+    }
+
+    const conflict = await this.usersRepo.findOne({
+      where: { email: updateUserDto.email },
+    });
+    if (conflict) {
+      throw new ConflictException('This email already exists');
+    }
+
     return this.usersRepo.save({
       user_id: id,
       ...updateUserDto,

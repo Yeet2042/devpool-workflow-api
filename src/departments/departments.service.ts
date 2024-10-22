@@ -17,9 +17,11 @@ export class DepartmentsService {
   ) {}
 
   async create(createDepartmentDto: CreateDepartmentDto) {
-    const department = await this.findByName(createDepartmentDto.name);
+    const department = await this.departmentRepo.findOne({
+      where: { name: createDepartmentDto.name },
+    });
     if (department) {
-      throw new ConflictException('Department already exists');
+      throw new ConflictException('This department already exists');
     }
     return this.departmentRepo.save(createDepartmentDto);
   }
@@ -60,7 +62,9 @@ export class DepartmentsService {
       return updateDepartmentDto;
     }
 
-    const conflict = await this.findByName(updateDepartmentDto.name);
+    const conflict = await this.departmentRepo.findOne({
+      where: { name: updateDepartmentDto.name },
+    });
     if (conflict) {
       throw new ConflictException('This name already exists');
     }
