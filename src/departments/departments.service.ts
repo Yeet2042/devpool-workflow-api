@@ -47,7 +47,17 @@ export class DepartmentsService {
     if (!department) {
       throw new NotFoundException('Department not found');
     }
-    return this.departmentRepo.findOne({ where: { name: name } });
+    return department;
+  }
+
+  async findByUser(user_id: number): Promise<Department | null> {
+    const department = await this.departmentRepo.findOne({
+      where: { user: { user_id } },
+    });
+    if (!department) {
+      throw new NotFoundException('Department not found');
+    }
+    return department;
   }
 
   async update(id: number, updateDepartmentDto: UpdateDepartmentDto) {
@@ -59,7 +69,7 @@ export class DepartmentsService {
     }
 
     if (department.name === updateDepartmentDto.name) {
-      return updateDepartmentDto;
+      return department;
     }
 
     const conflict = await this.departmentRepo.findOne({

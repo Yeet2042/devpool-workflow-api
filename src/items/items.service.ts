@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Item } from './entities/item.entity';
+import { Item, StatusEnum } from './entities/item.entity';
 import { Repository } from 'typeorm';
 import { DepartmentsService } from 'src/departments/departments.service';
 
@@ -14,8 +14,8 @@ export class ItemsService {
   ) {}
 
   async create(createItemDto: CreateItemDto) {
-    const departmentId = await this.DepartmentsService.findByName(
-      createItemDto.department.name,
+    const departmentId = await this.DepartmentsService.findByUser(
+      createItemDto.user.user_id,
     );
 
     const itemWithDepartmentId = {
@@ -47,6 +47,22 @@ export class ItemsService {
     const item = await this.itemRepo.findOne({ where: { item_id: id } });
     if (!item) throw new NotFoundException('Item not found');
     return this.itemRepo.save({ item_id: id, ...updateItemDto });
+  }
+
+  async approve(id: number) {
+    if (!id) throw new NotFoundException('Id should not empty');
+    const item = await this.itemRepo.findOne({ where: { item_id: id } });
+    if (!item) throw new NotFoundException('Item not found');
+    item.status = StatusEnum.APPROVED;
+    return this.itemRepo.save(item);
+  }
+
+  async reject(id: number) {
+    if (!id) throw new NotFoundException('Id should not empty');
+    const item = await this.itemRepo.findOne({ where: { item_id: id } });
+    if (!item) throw new NotFoundException('Item not found');
+    item.status = StatusEnum.REJECTED;
+    return this.itemRepo.save(item);
   }
 
   async remove(id: number) {

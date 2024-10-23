@@ -2,7 +2,7 @@ import { Department } from '../../departments/entities/department.entity';
 import { User } from '../../users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-enum StatusEnum {
+export enum StatusEnum {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',

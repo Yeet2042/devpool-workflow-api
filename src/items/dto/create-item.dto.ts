@@ -5,10 +5,6 @@ export class CreateItemDto {
   @IsNotEmpty()
   user: { user_id: number };
 
-  @IsObject()
-  @IsNotEmpty()
-  department: { name: string };
-
   @IsString()
   @IsNotEmpty()
   title: string;

@@ -45,6 +45,20 @@ export class ItemsController {
     return this.itemsService.update(+id, updateItemDto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles([Role.ADMIN, Role.APPROVER])
+  @Patch(':id/approve')
+  approve(@Param('id') id: string) {
+    return this.itemsService.approve(+id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles([Role.ADMIN, Role.APPROVER])
+  @Patch(':id/reject')
+  reject(@Param('id') id: string) {
+    return this.itemsService.reject(+id);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
