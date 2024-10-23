@@ -18,6 +18,12 @@ export class UsersService {
     private departmentsService: DepartmentsService,
   ) {}
 
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt();
+    const hashPass = await bcrypt.hash(password, salt);
+    return hashPass;
+  }
+
   async create(createUserDto: CreateUserDto) {
     const conflict = await this.usersRepo.findOne({
       where: { email: createUserDto.email },
@@ -26,8 +32,7 @@ export class UsersService {
       throw new ConflictException('This email already exists');
     }
 
-    const salt = await bcrypt.genSalt();
-    const hashPass = await bcrypt.hash(createUserDto.password, salt);
+    const hashPass = await this.hashPassword(createUserDto.password);
 
     const departmentId = await this.departmentsService.findByName(
       createUserDto.department.name,

@@ -16,6 +16,7 @@ import dbConfig from './db/db.config';
 import { LoginLoggerMiddleware } from './middlewares/login-logger.middleware';
 import { ItemsLoggerMiddleware } from './middlewares/items-logger.middleware';
 import { ItemsController } from './items/items.controller';
+import { AdminCheckService } from './services/admin-check/admin-check.service';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { ItemsController } from './items/items.controller';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AdminCheckService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
