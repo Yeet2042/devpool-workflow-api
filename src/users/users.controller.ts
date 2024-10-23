@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,7 +16,9 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles-auth/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from './entities/user.entity';
+import { PerfLoggerInterceptor } from 'src/interceptors/perf-logger.interceptor';
 
+@UseInterceptors(PerfLoggerInterceptor)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -29,14 +32,14 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles([Role.ADMIN])
-  @Get()
+  @Get('/all')
   findAll() {
     return this.usersService.findAll();
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles([Role.ADMIN])
-  @Get(':id')
+  @Get('/all/:id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }

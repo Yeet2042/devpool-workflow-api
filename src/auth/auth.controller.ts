@@ -1,9 +1,18 @@
-import { Controller, Post, Request, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Request,
+  Res,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoggedInDto } from './strategies/dto/logged-in.dto';
 import { Response } from 'express';
+import { PerfLoggerInterceptor } from 'src/interceptors/perf-logger.interceptor';
 
+@UseInterceptors(PerfLoggerInterceptor)
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
@@ -15,7 +16,9 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles-auth/roles.guard';
 import { Role } from 'src/users/entities/user.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { PerfLoggerInterceptor } from 'src/interceptors/perf-logger.interceptor';
 
+@UseInterceptors(PerfLoggerInterceptor)
 @Controller('departments')
 export class DepartmentsController {
   constructor(private readonly departmentsService: DepartmentsService) {}

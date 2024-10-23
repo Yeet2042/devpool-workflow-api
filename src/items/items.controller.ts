@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
@@ -15,7 +16,9 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/users/entities/user.entity';
 import { RolesGuard } from 'src/auth/guards/roles-auth/roles.guard';
+import { PerfLoggerInterceptor } from 'src/interceptors/perf-logger.interceptor';
 
+@UseInterceptors(PerfLoggerInterceptor)
 @Controller('items')
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
