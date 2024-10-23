@@ -6,6 +6,7 @@ import { DbModule } from './db/db.module';
 import { ItemsModule } from './items/items.module';
 import { UsersModule } from './users/users.module';
 import { DepartmentsModule } from './departments/departments.module';
+import { AuthModule } from './auth/auth.module';
 import dbConfig from './db/db.config';
 
 @Module({
@@ -15,6 +16,7 @@ import dbConfig from './db/db.config';
     ItemsModule,
     UsersModule,
     DepartmentsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

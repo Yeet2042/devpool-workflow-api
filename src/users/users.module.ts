@@ -9,5 +9,6 @@ import { DepartmentsModule } from 'src/departments/departments.module';
   imports: [TypeOrmModule.forFeature([User]), DepartmentsModule],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}
