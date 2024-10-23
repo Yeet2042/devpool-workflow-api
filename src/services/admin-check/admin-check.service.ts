@@ -4,8 +4,8 @@ import {
   OnApplicationBootstrap,
 } from '@nestjs/common';
 import { DepartmentsService } from '../../departments/departments.service';
-import { Role } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { Role } from '../../users/entities/user.entity';
+import { UsersService } from '../../users/users.service';
 
 @Injectable()
 export class AdminCheckService implements OnApplicationBootstrap {

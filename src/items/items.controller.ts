@@ -12,11 +12,11 @@ import {
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { Role } from 'src/users/entities/user.entity';
-import { RolesGuard } from 'src/auth/guards/roles-auth/roles.guard';
-import { PerfLoggerInterceptor } from 'src/interceptors/perf-logger.interceptor';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../users/entities/user.entity';
+import { RolesGuard } from '../auth/guards/roles-auth/roles.guard';
+import { PerfLoggerInterceptor } from '../interceptors/perf-logger.interceptor';
 
 @UseInterceptors(PerfLoggerInterceptor)
 @Controller('items')

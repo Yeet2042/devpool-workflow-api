@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoggedInDto } from './strategies/dto/logged-in.dto';
 import { Response } from 'express';
-import { PerfLoggerInterceptor } from 'src/interceptors/perf-logger.interceptor';
+import { PerfLoggerInterceptor } from '../interceptors/perf-logger.interceptor';
 
 @UseInterceptors(PerfLoggerInterceptor)
 @Controller('auth')

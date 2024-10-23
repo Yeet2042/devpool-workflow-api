@@ -1,5 +1,5 @@
-import { Department } from 'src/departments/entities/department.entity';
-import { Role } from 'src/users/entities/user.entity';
+import { Department } from '../../../departments/entities/department.entity';
+import { Role } from '../../../users/entities/user.entity';
 
 export class LoggedInDto {
   user_id: number;
