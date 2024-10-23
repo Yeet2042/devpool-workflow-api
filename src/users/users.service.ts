@@ -48,26 +48,33 @@ export class UsersService {
   }
 
   findAll() {
-    return this.usersRepo.find({ relations: ['department'] });
+    return this.usersRepo.find({
+      relations: ['department'],
+      select: { user_id: true, name: true, email: true, role: true },
+    });
   }
 
   async findOne(id: number) {
     const user = await this.usersRepo.findOne({
       where: { user_id: id },
       relations: ['department'],
+      select: { user_id: true, name: true, email: true, role: true },
     });
     if (!user) throw new NotFoundException('User not found');
     return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
+    //check user
     const user = await this.usersRepo.findOne({ where: { user_id: id } });
     if (!user) throw new NotFoundException('User not found');
 
+    //check equal email
     if (user.email === updateUserDto.email) {
       return updateUserDto;
     }
 
+    //check conflict
     const conflict = await this.usersRepo.findOne({
       where: { email: updateUserDto.email },
     });

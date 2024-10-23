@@ -1,37 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Item } from './entities/item.entity';
+import { Repository } from 'typeorm';
+import { DepartmentsService } from 'src/departments/departments.service';
 
 @Injectable()
 export class ItemsService {
-  create(createItemDto: CreateItemDto) {
-    const item = {
-      item_id: 1,
-      user_id: 1,
-      department_id: 1,
-      title: 'test item',
-      amount: 10.25,
-      quantity: 5,
-      status: 'PENDING',
-      create_at: new Date(),
-      update_at: new Date(),
+  constructor(
+    @InjectRepository(Item) private itemRepo: Repository<Item>,
+    private DepartmentsService: DepartmentsService,
+  ) {}
+
+  async create(createItemDto: CreateItemDto) {
+    const departmentId = await this.DepartmentsService.findByName(
+      createItemDto.department.name,
+    );
+
+    const itemWithDepartmentId = {
+      ...createItemDto,
+      user: { user_id: createItemDto.user.user_id },
+      department: { department_id: departmentId.department_id },
     };
-    return item;
+    return this.itemRepo.save(itemWithDepartmentId);
   }
 
   findAll() {
-    return `This action returns all items`;
+    return this.itemRepo.find({
+      relations: ['user', 'department'],
+      select: { user: { user_id: true, name: true, role: true } },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} item`;
+  async findOne(id: number) {
+    const item = await this.itemRepo.findOne({
+      where: { item_id: id },
+      relations: ['user', 'department'],
+      select: { user: { user_id: true, name: true, role: true } },
+    });
+    if (!item) throw new NotFoundException('Item not found');
+    return item;
   }
 
-  update(id: number, updateItemDto: UpdateItemDto) {
-    return `This action updates a #${id} item`;
+  async update(id: number, updateItemDto: UpdateItemDto) {
+    const item = await this.itemRepo.findOne({ where: { item_id: id } });
+    if (!item) throw new NotFoundException('Item not found');
+    return this.itemRepo.save({ item_id: id, ...updateItemDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} item`;
+  async remove(id: number) {
+    const item = await this.itemRepo.findOne({
+      where: { item_id: id },
+      relations: ['user', 'department'],
+      select: { user: { user_id: true, name: true, role: true } },
+    });
+    if (!item) throw new NotFoundException('Item not found');
+    return this.itemRepo.remove(item);
   }
 }
