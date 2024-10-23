@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { DepartmentsService } from 'src/departments/departments.service';
+import { DepartmentsService } from '../departments/departments.service';
 
 @Injectable()
 export class UsersService {

@@ -4,7 +4,7 @@ import { UpdateItemDto } from './dto/update-item.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Item, StatusEnum } from './entities/item.entity';
 import { Repository } from 'typeorm';
-import { DepartmentsService } from 'src/departments/departments.service';
+import { DepartmentsService } from '../departments/departments.service';
 
 @Injectable()
 export class ItemsService {

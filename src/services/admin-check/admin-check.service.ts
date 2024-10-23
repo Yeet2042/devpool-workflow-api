@@ -3,7 +3,7 @@ import {
   NotFoundException,
   OnApplicationBootstrap,
 } from '@nestjs/common';
-import { DepartmentsService } from 'src/departments/departments.service';
+import { DepartmentsService } from '../../departments/departments.service';
 import { Role } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 
