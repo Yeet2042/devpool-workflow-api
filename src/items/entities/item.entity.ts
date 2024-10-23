@@ -1,6 +1,13 @@
 import { Department } from '../../departments/entities/department.entity';
 import { User } from '../../users/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export enum StatusEnum {
   PENDING = 'PENDING',
@@ -35,4 +42,10 @@ export class Item {
     default: StatusEnum.PENDING,
   })
   status: StatusEnum;
+
+  @CreateDateColumn({ type: 'timestamp', nullable: false })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', nullable: true })
+  updated_at: Date;
 }
