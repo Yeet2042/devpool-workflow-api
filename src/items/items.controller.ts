@@ -12,6 +12,9 @@ import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/users/entities/user.entity';
+import { RolesGuard } from 'src/auth/guards/roles-auth/roles.guard';
 
 @Controller('items')
 export class ItemsController {
@@ -23,7 +26,8 @@ export class ItemsController {
     return this.itemsService.create(createItemDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles([Role.ADMIN])
   @Get()
   findAll() {
     return this.itemsService.findAll();
