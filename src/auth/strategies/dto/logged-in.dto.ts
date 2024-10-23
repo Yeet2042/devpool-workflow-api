@@ -7,4 +7,5 @@ export class LoggedInDto {
   email: string;
   role: Role;
   department: Department;
+  sub?: number;
 }

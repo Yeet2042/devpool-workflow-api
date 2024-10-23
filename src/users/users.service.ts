@@ -68,7 +68,7 @@ export class UsersService {
     if (!email) {
       return null;
     }
-    return this.usersRepo.findOne({ where: { email } });
+    return this.usersRepo.findOne({ where: { email }, relations: ['department'], });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
