@@ -36,15 +36,13 @@ export class AdminCheckService implements OnApplicationBootstrap {
     const adminUser = await this.usersService.findOneByEmail(`${email}`);
 
     if (!adminUser) {
-      const hashPass = await this.usersService.hashPassword(password);
-
       const newAdminUser = await this.usersService.create({
         department: {
           name: departmentName,
         },
         name,
         email,
-        password: hashPass,
+        password,
         role: Role.ADMIN,
       });
 
