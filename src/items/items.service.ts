@@ -33,12 +33,32 @@ export class ItemsService {
     });
   }
 
-  async findOne(id: number) {
+  findAllByDepartment(name: string) {
+    return this.itemRepo.find({
+      where: { department: { name } },
+      relations: ['user', 'department'],
+      select: { user: { user_id: true, name: true, role: true } },
+    });
+  }
+
+  async findOneById(id: number) {
     const item = await this.itemRepo.findOne({
       where: { item_id: id },
       relations: ['user', 'department'],
       select: { user: { user_id: true, name: true, role: true } },
     });
+
+    if (!item) throw new NotFoundException('Item not found');
+    return item;
+  }
+
+  async findOneByDepartmentAndId(name: string, id: number) {
+    const item = await this.itemRepo.findOne({
+      where: { item_id: id, department: { name } },
+      relations: ['user', 'department'],
+      select: { user: { user_id: true, name: true, role: true } },
+    });
+
     if (!item) throw new NotFoundException('Item not found');
     return item;
   }

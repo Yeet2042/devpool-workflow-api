@@ -28,39 +28,55 @@ export class ItemsController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles([Role.ADMIN])
-  @Get()
+  @Get('/all')
   findAll() {
     return this.itemsService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.itemsService.findOne(+id);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles([Role.ADMIN])
+  @Get('/all/:id')
+  findOneById(@Param('id') id: string) {
+    return this.itemsService.findOneById(+id);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
+  @Get(':department')
+  findAllByDepartment(@Param('department') name: string) {
+    return this.itemsService.findAllByDepartment(name);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':department/:id')
+  findOneByDepartmentAndId(
+    @Param('department') name: string,
+    @Param('id') id: string,
+  ) {
+    return this.itemsService.findOneByDepartmentAndId(name, +id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':department/:id')
   update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
     return this.itemsService.update(+id, updateItemDto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles([Role.ADMIN, Role.APPROVER])
-  @Patch(':id/approve')
+  @Patch(':department/:id/approve')
   approve(@Param('id') id: string) {
     return this.itemsService.approve(+id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles([Role.ADMIN, Role.APPROVER])
-  @Patch(':id/reject')
+  @Patch(':department/:id/reject')
   reject(@Param('id') id: string) {
     return this.itemsService.reject(+id);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
+  @Delete(':department/:id')
   remove(@Param('id') id: string) {
     return this.itemsService.remove(+id);
   }
