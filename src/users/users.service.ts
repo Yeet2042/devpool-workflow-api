@@ -64,11 +64,32 @@ export class UsersService {
     return user;
   }
 
+  findAllByDepartment(name: string) {
+    return this.usersRepo.find({
+      where: { department: { name } },
+      relations: ['department'],
+      select: { user_id: true, name: true, email: true, role: true },
+    });
+  }
+
+  async findOneByDepartmentAndId(name: string, id: number) {
+    const user = await this.usersRepo.findOne({
+      where: { user_id: id, department: { name } },
+      relations: ['department'],
+      select: { user_id: true, name: true, email: true, role: true },
+    });
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
   async findOneByEmail(email: string): Promise<User> {
     if (!email) {
       return null;
     }
-    return this.usersRepo.findOne({ where: { email }, relations: ['department'], });
+    return this.usersRepo.findOne({
+      where: { email },
+      relations: ['department'],
+    });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
