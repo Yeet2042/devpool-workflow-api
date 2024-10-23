@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -8,6 +13,9 @@ import { UsersModule } from './users/users.module';
 import { DepartmentsModule } from './departments/departments.module';
 import { AuthModule } from './auth/auth.module';
 import dbConfig from './db/db.config';
+import { LoginLoggerMiddleware } from './middlewares/login-logger.middleware';
+import { ItemsLoggerMiddleware } from './middlewares/items-logger.middleware';
+import { ItemsController } from './items/items.controller';
 
 @Module({
   imports: [
@@ -21,4 +29,11 @@ import dbConfig from './db/db.config';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoginLoggerMiddleware)
+      .forRoutes({ path: '*login*', method: RequestMethod.POST });
+    consumer.apply(ItemsLoggerMiddleware).forRoutes(ItemsController);
+  }
+}
