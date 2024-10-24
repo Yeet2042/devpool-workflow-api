@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoggedInDto } from './strategies/dto/logged-in.dto';
 import { PerfLoggerInterceptor } from '../interceptors/perf-logger.interceptor';
+import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
 
 @UseInterceptors(PerfLoggerInterceptor)
 @Controller('auth')
@@ -18,8 +19,12 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Request() request: { user: LoggedInDto }) {
-    const access_token = this.authService.login(request.user);
+    return this.authService.login(request.user);
+  }
 
-    return { access_token };
+  @UseGuards(RefreshJwtAuthGuard)
+  @Post('refresh')
+  refreshToken(@Request() request: { user: LoggedInDto }) {
+    return this.authService.refreshToken(request.user);
   }
 }
