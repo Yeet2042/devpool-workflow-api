@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Post,
   Request,
   UseGuards,
@@ -10,6 +11,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoggedInDto } from './strategies/dto/logged-in.dto';
 import { PerfLoggerInterceptor } from '../interceptors/perf-logger.interceptor';
 import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
+import { Oauth2AuthGuard } from './guards/oauth2-auth.guard';
 
 @UseInterceptors(PerfLoggerInterceptor)
 @Controller('auth')
@@ -26,5 +28,16 @@ export class AuthController {
   @Post('refresh')
   refreshToken(@Request() request: { user: LoggedInDto }) {
     return this.authService.refreshToken(request.user);
+  }
+
+  @Get('login-oauth2-redirect-url')
+  loginOauth2RedirectUrl(): { redirectUrl: string } {
+    return { redirectUrl: this.authService.getOauth2RedirectUrl() };
+  }
+
+  @UseGuards(Oauth2AuthGuard)
+  @Post('login-oauth2')
+  loginKeycloak(@Request() request: { user: LoggedInDto }) {
+    return this.authService.login(request.user);
   }
 }
