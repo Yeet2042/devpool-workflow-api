@@ -2,14 +2,12 @@ import {
   Controller,
   Post,
   Request,
-  Res,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoggedInDto } from './strategies/dto/logged-in.dto';
-import { Response } from 'express';
 import { PerfLoggerInterceptor } from '../interceptors/perf-logger.interceptor';
 
 @UseInterceptors(PerfLoggerInterceptor)
@@ -19,13 +17,9 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Request() request: { user: LoggedInDto }, @Res() response: Response) {
+  login(@Request() request: { user: LoggedInDto }) {
     const access_token = this.authService.login(request.user);
 
-    response.setHeader('Authorization', `Bearer ${access_token}`);
-
-    return response.status(200).json({
-      message: 'Login successful',
-    });
+    return { access_token };
   }
 }
