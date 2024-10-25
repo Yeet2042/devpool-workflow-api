@@ -7,7 +7,7 @@ To run the project successfully, ensure to run the backend service as well. Alte
 
 ## Requrement
 - PostgreSQL
-- [Workflow-API](https://github.com/Yeet2042/devpool-workflow-app) (Fontend Project)
+- [Workflow-APP](https://github.com/Yeet2042/devpool-workflow-app) (Fontend Project)
 - Keycloak (optional)
 ## Use " Bun " for better experience :D
 Install Bun ( Linux )
