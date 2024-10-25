@@ -98,27 +98,34 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    //check user
     const user = await this.usersRepo.findOne({ where: { user_id: id } });
     if (!user) throw new NotFoundException('User not found');
 
-    //check equal email
-    if (user.email === updateUserDto.email) {
-      return updateUserDto;
+    const { email, ...updateUserDtoWithoutEmail } = updateUserDto;
+    if (user.email === email) {
+      updateUserDto = updateUserDtoWithoutEmail;
+    } else {
+      const conflict = await this.usersRepo.findOne({
+        where: { email },
+      });
+      if (conflict) {
+        throw new ConflictException('This email already exists');
+      }
     }
 
-    //check conflict
-    const conflict = await this.usersRepo.findOne({
-      where: { email: updateUserDto.email },
-    });
-    if (conflict) {
-      throw new ConflictException('This email already exists');
-    }
-
-    return this.usersRepo.save({
-      user_id: id,
+    const userWithHashPass = {
       ...updateUserDto,
+      password: await this.hashPassword(updateUserDto.password),
+    };
+
+    const UpdatedUser = await this.usersRepo.save({
+      user_id: id,
+      ...userWithHashPass,
     });
+
+    const { password, ...userWithoutPass } = UpdatedUser;
+
+    return userWithoutPass;
   }
 
   async remove(id: number) {
