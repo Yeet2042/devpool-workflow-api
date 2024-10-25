@@ -3,7 +3,7 @@
 Workflow-API is a RESTful API built with NestJS, designed to streamline budget management and workflow processes within organizations. Providing a user-friendly interface and robust backend architecture.
 
 ## Important Note
-To run the project successfully, ensure to run the backend service as well. Alternatively, you can run the [Workflow-Integration](https://github.com/Yeet2042/devpool-workflow-integration) project, which connects the [Workflow-API](https://github.com/Yeet2042/devpool-workflow-app) with the Angular frontend.
+To run the project successfully, ensure to run the backend service as well. Alternatively, you can run the [Workflow-Integration](https://github.com/Yeet2042/devpool-workflow-integration) project, which connects the [Workflow-API](https://github.com/Yeet2042/devpool-workflow-app) with the Angular frontend ([Workflow-APP](https://github.com/Yeet2042/devpool-workflow-app)).
 
 ## Requrement
 - PostgreSQL
