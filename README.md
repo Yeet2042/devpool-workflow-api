@@ -46,5 +46,3 @@ Install Bun ( Windows )
 
 **Server:** NestJS
 
-**Style:** SCSS, TailwindCSS
-
