@@ -1,27 +1,50 @@
-# WorkflowApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.7.
+# Workflow-API 
+Workflow-API is a RESTful API built with NestJS, designed to streamline budget management and workflow processes within organizations. Providing a user-friendly interface and robust backend architecture.
 
-## Development server
+## Important Note
+To run the project successfully, ensure to run the backend service as well. Alternatively, you can run the [Workflow-Integration](https://github.com/Yeet2042/devpool-workflow-integration) project, which connects the [Workflow-API](https://github.com/Yeet2042/devpool-workflow-app) with the Angular frontend.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Requrement
+- PostgreSQL
+- [Workflow-API](https://github.com/Yeet2042/devpool-workflow-app) (Fontend Project)
+- Keycloak (optional)
+## Use " Bun " for better experience :D
+Install Bun ( Linux )
+```bash
+  curl -fsSL https://bun.sh/install | bash
+```
 
-## Code scaffolding
+Install Bun ( Windows )
+```bash
+  powershell -c "irm bun.sh/install.ps1 | iex"
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Initailize modules
+```bash
+  bun i
+```
 
-## Build
+## Migrate Database
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+  bun run migrations:run
+```
 
-## Running unit tests
+## Build and run the project
+```bash
+  # build
+  bun run build
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  # watch mode
+  bun run start:dev
 
-## Running end-to-end tests
+  # production mode
+  bun run start:prod
+```
+## Tech Stack
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+**Server:** NestJS
 
-## Further help
+**Style:** SCSS, TailwindCSS
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
