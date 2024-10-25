@@ -22,6 +22,10 @@ COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/dist ./dist
 COPY --from=prerelease /usr/src/app/package.json .
 
+# Health Check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/ || exit 1
+
 USER bun
 EXPOSE 3000/tcp
 ENTRYPOINT ["sh", "-c", "bun run migrations:run && bun run start:prod"]
